@@ -1,4 +1,7 @@
 package com.eseo.compteurapp
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -14,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var increment : Button
     lateinit var decrement : Button
     lateinit var compteurViewModel: CompteurViewModel
-
+    lateinit var compteurPref : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         compteurText.text = "${compteurViewModel.count}"
 
-        increment.setOnClickListener {
+        increment.setOnClickListener{
             compteurViewModel.incrementer()
             compteurText.text = "${compteurViewModel.count}"
         }
@@ -38,4 +41,77 @@ class MainActivity : AppCompatActivity() {
             compteurText.text = "${compteurViewModel.count}"
         }
     }
+
+    fun saveCompteur(){
+        compteurPref = getSharedPreferences(
+            "Compteur_pref",
+            Context.MODE_PRIVATE
+        )
+        val compteurEditor : SharedPreferences.Editor
+        compteurEditor = compteurPref.edit()
+
+        compteurEditor.putInt(
+            "compteur",
+            compteurViewModel.count
+        )
+        compteurEditor.apply()
+    }
+
+    fun getCompteur() : Int {
+       return compteurPref.getInt(
+            "compteur",
+            compteurViewModel.count
+        )
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
