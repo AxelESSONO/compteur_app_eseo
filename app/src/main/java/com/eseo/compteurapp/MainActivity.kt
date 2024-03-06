@@ -1,5 +1,6 @@
 package com.eseo.compteurapp
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.os.Bundle
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var compteurText : TextView
     lateinit var increment : Button
     lateinit var decrement : Button
+    lateinit var sendCompteurBtn : Button
     lateinit var compteurViewModel: CompteurViewModel
     lateinit var compteurPref : SharedPreferences
 
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         compteurText = findViewById(R.id.compteurText)
         increment = findViewById(R.id.incrementButton)
         decrement = findViewById(R.id.decrementButton)
+        sendCompteurBtn = findViewById(R.id.sendCompteurButton)
 
         compteurViewModel = ViewModelProvider(this)
             .get(CompteurViewModel::class.java)
@@ -49,6 +52,19 @@ class MainActivity : AppCompatActivity() {
             compteurText.text = "${compteurViewModel.count}"
             saveCompteur()
         }
+
+        sendCompteurBtn.setOnClickListener {
+            val compteurIntent = Intent(
+                this,
+                CompteurActivity::class.java
+            )
+            compteurIntent.putExtra(
+                "compteur",
+                getCompteur()
+            )
+            startActivity(compteurIntent)
+        }
+
     }
 
     fun saveCompteur(){
@@ -60,9 +76,7 @@ class MainActivity : AppCompatActivity() {
             "compteur",
             compteurViewModel.count
         )
-
         compteurEditor.putString("compteur_bis", "J'ai stocké ${compteurViewModel.count}")
-
         compteurEditor.apply()
     }
 
