@@ -30,23 +30,29 @@ class MainActivity : AppCompatActivity() {
         compteurViewModel = ViewModelProvider(this)
             .get(CompteurViewModel::class.java)
 
-        compteurText.text = "${compteurViewModel.count}"
-
-        increment.setOnClickListener{
-            compteurViewModel.incrementer()
-            compteurText.text = "${compteurViewModel.count}"
-        }
-        decrement.setOnClickListener {
-            compteurViewModel.decrement()
-            compteurText.text = "${compteurViewModel.count}"
-        }
-    }
-
-    fun saveCompteur(){
         compteurPref = getSharedPreferences(
             "Compteur_pref",
             Context.MODE_PRIVATE
         )
+
+        compteurViewModel.count = getCompteur()
+        compteurText.text = "${getCompteur()}"
+
+        increment.setOnClickListener{
+            //val compteur = getCompteur()
+            compteurViewModel.incrementer()
+            compteurText.text = "${compteurViewModel.count}"
+            saveCompteur()
+        }
+        decrement.setOnClickListener {
+            compteurViewModel.decrement()
+            compteurText.text = "${compteurViewModel.count}"
+            saveCompteur()
+        }
+    }
+
+    fun saveCompteur(){
+
         val compteurEditor : SharedPreferences.Editor
         compteurEditor = compteurPref.edit()
 
@@ -54,6 +60,9 @@ class MainActivity : AppCompatActivity() {
             "compteur",
             compteurViewModel.count
         )
+
+        compteurEditor.putString("compteur_bis", "J'ai stocké ${compteurViewModel.count}")
+
         compteurEditor.apply()
     }
 
