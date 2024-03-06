@@ -6,13 +6,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var compteurText : TextView
     lateinit var increment : Button
     lateinit var decrement : Button
-    var count : Int = 0
+    lateinit var compteurViewModel: CompteurViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,15 +24,18 @@ class MainActivity : AppCompatActivity() {
         increment = findViewById(R.id.incrementButton)
         decrement = findViewById(R.id.decrementButton)
 
-        compteurText.text = "$count"
+        compteurViewModel = ViewModelProvider(this)
+            .get(CompteurViewModel::class.java)
+
+        compteurText.text = "${compteurViewModel.count}"
 
         increment.setOnClickListener {
-            count++
-            compteurText.text = "$count"
+            compteurViewModel.incrementer()
+            compteurText.text = "${compteurViewModel.count}"
         }
         decrement.setOnClickListener {
-            count--
-            compteurText.text = "$count"
+            compteurViewModel.decrement()
+            compteurText.text = "${compteurViewModel.count}"
         }
     }
 }
